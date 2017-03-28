@@ -38,20 +38,21 @@ def call(body) {
     echo "s2i mode: ${s2iMode}"
 
     if (!s2iMode){
-        if (flow.isSingleNode()){
+        // TODO JPC evaluate docker tag vs push
+        /*if (flow.isSingleNode()){
             echo 'Running on a single node, skipping docker push as not needed'
             def m = readMavenPom file: 'pom.xml'
             def groupId = m.groupId.split( '\\.' )
             def user = groupId[groupId.size()-1].trim()
             def artifactId = m.artifactId
 
-            sh "docker tag ambition/bootiful:${config.version} ${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${user}/${artifactId}:${config.version}"
+            sh "docker tag ${user}/${artifactId}:${config.version} ${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${user}/${artifactId}:${config.version}"
 
-        }else{
+        }else{*/
             retry(3){
                 sh "mvn fabric8:push -Ddocker.push.registry=${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}"
             }
-        }
+        /*}*/
     }
 
     if (flow.hasService("content-repository")) {
